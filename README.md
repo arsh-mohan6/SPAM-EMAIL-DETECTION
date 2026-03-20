@@ -1,5 +1,10 @@
 #  Spam Email Detection System
 
+
+<p align="center">
+  <img src="results/model_accuracy_comparison.png" width="600">
+</p>
+
 A Machine Learning-based project that classifies emails as **Spam** or **Not Spam** using Natural Language Processing (NLP) techniques and multiple classification algorithms.
 
 
