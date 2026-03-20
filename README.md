@@ -2,7 +2,7 @@
 
 A Machine Learning-based project that classifies emails as **Spam** or **Not Spam** using Natural Language Processing (NLP) techniques and multiple classification algorithms.
 
----
+
 
 ##  Project Overview
 
@@ -10,7 +10,7 @@ This project aims to build an automated spam email detection system using machin
 
 The system compares multiple machine learning models and selects the best-performing one for prediction.
 
----
+
 
 ##  Algorithms Used
 
@@ -18,9 +18,8 @@ The system compares multiple machine learning models and selects the best-perfor
 - Logistic Regression  
 - Support Vector Machine (SVM)  
 
----
 
-## ⚙️ Technologies & Libraries
+##  Technologies & Libraries
 
 - Python  
 - Pandas  
@@ -30,7 +29,7 @@ The system compares multiple machine learning models and selects the best-perfor
 - Matplotlib  
 - Seaborn  
 
----
+
 
 ##  Project Structure
 SPAM_EMAIL_DETECTION/
@@ -50,7 +49,7 @@ SPAM_EMAIL_DETECTION/
 │
 └── README.me
 
----
+
 
 ##  Workflow
 Email Input
@@ -64,7 +63,7 @@ Machine Learning Model (SVM)
 Spam / Not Spam Prediction
 
 
----
+
 
 ##  Model Performance
 
@@ -74,7 +73,6 @@ Spam / Not Spam Prediction
 | Logistic Regression | 99.90% | 99.79% | 100% |
 | SVM | **99.91%** | **99.82%** | **100%** |
 
----
 
 ##  Results
 
@@ -85,14 +83,14 @@ The **Support Vector Machine (SVM)** model achieved the best performance with th
 - Training vs Testing accuracy comparison  
 - Model comparison visualization  
 
----
+
 
 ##  Example Prediction
 Input: Hi John, let's schedule a meeting tomorrow morning.
 Output: Not a Spam Email
 
 
----
+
 
 ##  Model Saving
 
@@ -103,14 +101,14 @@ Trained models and TF-IDF vectorizer are saved using `joblib`:
 - svm_model.pkl  
 - tfidf_vectorizer.pkl  
 
----
+
 
 ##  Dataset
 
 - Enron Spam Dataset  
   https://www.kaggle.com/datasets/marcelwiechmann/enron-spam-data  
 
----
+
 
 ##  Future Improvements
 
@@ -119,13 +117,13 @@ Trained models and TF-IDF vectorizer are saved using `joblib`:
 - Web-based spam detection interface  
 - Multilingual spam detection  
 
----
+
 
 ##  Author
 
 Your Name: Arsh Mohan Nishant
 
----
+------
 
 ##  Acknowledgements
 
