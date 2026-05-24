@@ -50,10 +50,17 @@ defaults = {
     "theme": "cyber",
     "email_input": "",
     "last_result": None,
+    "just_launched": False,
 }
 for key, val in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = val
+
+# Fix old session keys from earlier versions
+if "email_text" in st.session_state and not st.session_state.get("email_input"):
+    st.session_state.email_input = st.session_state.pop("email_text")
+elif "email_text" in st.session_state:
+    del st.session_state["email_text"]
 
 
 def inject_css(theme: str, texture_uri: str | None = None):
@@ -163,19 +170,36 @@ html, body, [class*="css"] {{
     50% {{ opacity: 0.7; transform: scale(1.4); }}
 }}
 
-.top-bar {{
+.block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type {{
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 24px;
-    background: rgba(3, 7, 18, 0.72);
+    width: 100%;
+    max-width: 100%;
+    background: rgba(3, 7, 18, 0.9);
     backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    padding: 0.4rem 1.5rem 0.55rem 1.5rem;
+    margin: 0 !important;
+}}
+
+.block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type [data-testid="column"]:last-child p {{
+    text-align: right;
+    margin: 0.5rem 0 0 0;
+}}
+
+.block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type .stButton > button {{
+    width: auto !important;
+    min-width: 10rem;
+    height: 2.4rem !important;
+    font-size: 0.82rem !important;
+    padding: 0 1rem !important;
+}}
+
+.nav-spacer {{
+    height: 3.6rem;
 }}
 
 .brand-name {{
@@ -341,13 +365,53 @@ html, body, [class*="css"] {{
     margin: 0.5rem 0 0 1.1rem;
 }}
 
+.mail-writer-box {{
+    margin-top: 0.5rem;
+}}
+
+.mail-writer-reveal {{
+    animation: writerReveal 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+}}
+
+@keyframes writerReveal {{
+    0% {{
+        opacity: 0;
+        transform: translateY(40px) scale(0.96);
+        filter: blur(8px);
+        box-shadow: 0 0 0 rgba(34, 211, 238, 0);
+    }}
+    60% {{
+        box-shadow: 0 0 50px rgba(34, 211, 238, 0.35);
+    }}
+    100% {{
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+        box-shadow: 0 0 35px rgba(139, 92, 246, 0.25);
+    }}
+}}
+
+.mail-writer-label {{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: {accent};
+    margin: 0 0 0.6rem 0;
+    text-shadow: 0 0 14px {glow};
+}}
+
 div[data-testid="stTextArea"] textarea {{
-    background: rgba(8, 15, 35, 0.75) !important;
+    background: rgba(8, 15, 35, 0.82) !important;
     color: #f8fafc !important;
-    border: 1px solid rgba(139, 92, 246, 0.35) !important;
-    border-radius: 16px !important;
-    font-size: 1rem !important;
-    transition: box-shadow 0.3s ease, border-color 0.3s ease !important;
+    border: 2px solid rgba(139, 92, 246, 0.4) !important;
+    border-radius: 18px !important;
+    font-size: 1.05rem !important;
+    line-height: 1.55 !important;
+    min-height: 300px !important;
+    padding: 1.1rem 1.2rem !important;
+    transition: box-shadow 0.35s ease, border-color 0.35s ease !important;
 }}
 
 div[data-testid="stTextArea"] textarea:focus {{
@@ -565,42 +629,113 @@ div[data-testid="stTextArea"] label {{
 
 
 def inject_cursor_stars():
+    """Golden cursor trail — listens on parent page (Streamlit iframe fix)."""
     components.html(
         """
-        <div id="trail" style="position:fixed;inset:0;pointer-events:none;z-index:99999;"></div>
         <script>
-        const layer = document.getElementById('trail');
-        let lx = 0, ly = 0, ticking = false;
-        function star(x, y) {
-            const s = document.createElement('div');
-            s.style.cssText = `
-                position:absolute; left:${x}px; top:${y}px; width:5px; height:5px;
-                background:radial-gradient(circle,#fde68a,#f59e0b,transparent);
-                border-radius:50%; pointer-events:none;
-                box-shadow:0 0 6px #fbbf24, 0 0 12px #f59e0b;
-                animation:fadeStar 0.85s ease-out forwards;
-            `;
-            layer.appendChild(s);
-            setTimeout(() => s.remove(), 900);
-        }
-        const style = document.createElement('style');
-        style.textContent = `@keyframes fadeStar{
-            0%{opacity:1;transform:scale(1) translateY(0)}
-            100%{opacity:0;transform:scale(0.2) translateY(-28px)}
-        }`;
-        document.head.appendChild(style);
-        document.addEventListener('mousemove', (e) => {
-            const dx = e.clientX - lx, dy = e.clientY - ly;
-            if (Math.hypot(dx, dy) < 14) return;
-            lx = e.clientX; ly = e.clientY;
-            if (!ticking) {
-                ticking = true;
-                requestAnimationFrame(() => {
-                    star(lx + (Math.random()-0.5)*20, ly + (Math.random()-0.5)*20);
-                    ticking = false;
-                });
+        (function () {
+            const parentWin = window.parent;
+            const doc = parentWin.document;
+            if (parentWin.__spamCursorReady) return;
+            parentWin.__spamCursorReady = true;
+
+            const frame = window.frameElement;
+            if (frame) {
+                frame.style.cssText =
+                    "position:fixed!important;top:0!important;left:0!important;" +
+                    "width:100vw!important;height:0!important;border:none!important;" +
+                    "z-index:999999!important;pointer-events:none!important;background:transparent!important;";
             }
-        });
+
+            if (!doc.getElementById("spam-cursor-style")) {
+                const style = doc.createElement("style");
+                style.id = "spam-cursor-style";
+                style.textContent = `
+                    @keyframes cursorStarPop {
+                        0% { opacity: 1; transform: translate(-50%,-50%) scale(0.3) rotate(0deg); }
+                        50% { opacity: 1; transform: translate(-50%,-50%) scale(1.2) rotate(180deg); }
+                        100% { opacity: 0; transform: translate(-50%,-120%) scale(0.2) rotate(360deg); }
+                    }
+                    @keyframes cursorSparkFlash {
+                        0% { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+                        100% { opacity: 0; transform: translate(-50%,-50%) scale(2.2); }
+                    }
+                `;
+                doc.head.appendChild(style);
+            }
+
+            let layer = doc.getElementById("spam-cursor-layer");
+            if (!layer) {
+                layer = doc.createElement("div");
+                layer.id = "spam-cursor-layer";
+                layer.style.cssText =
+                    "position:fixed;inset:0;pointer-events:none;z-index:999998;overflow:hidden;";
+                doc.body.appendChild(layer);
+            }
+
+            let lx = 0, ly = 0, lastTime = 0;
+
+            function particle(x, y, type) {
+                const el = doc.createElement("div");
+                const size = type === "star" ? 6 + Math.random() * 8 : 4 + Math.random() * 5;
+                const colors = type === "star"
+                    ? "radial-gradient(circle,#fff7cc 0%,#fde047 35%,#f59e0b 70%,transparent 100%)"
+                    : "radial-gradient(circle,#ffffff 0%,#22d3ee 50%,transparent 100%)";
+                const anim = type === "star" ? "cursorStarPop" : "cursorSparkFlash";
+                const dur = type === "star" ? 0.75 + Math.random() * 0.35 : 0.45 + Math.random() * 0.2;
+
+                el.style.cssText = `
+                    position: fixed;
+                    left: ${x}px;
+                    top: ${y}px;
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: ${colors};
+                    border-radius: 50%;
+                    pointer-events: none;
+                    box-shadow: 0 0 10px #fbbf24, 0 0 18px #f59e0b, 0 0 6px #fff;
+                    animation: ${anim} ${dur}s ease-out forwards;
+                `;
+                if (type === "star" && Math.random() > 0.5) {
+                    el.style.clipPath = "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)";
+                    el.style.borderRadius = "0";
+                }
+                layer.appendChild(el);
+                setTimeout(() => el.remove(), dur * 1000 + 50);
+            }
+
+            function burst(x, y) {
+                particle(x, y, "spark");
+                particle(x + (Math.random() - 0.5) * 28, y + (Math.random() - 0.5) * 28, "star");
+                if (Math.random() > 0.35) {
+                    particle(x + (Math.random() - 0.5) * 36, y + (Math.random() - 0.5) * 36, "star");
+                }
+            }
+
+            doc.addEventListener("mousemove", (e) => {
+                const now = performance.now();
+                const dx = e.clientX - lx;
+                const dy = e.clientY - ly;
+                if (Math.hypot(dx, dy) < 6) return;
+                lx = e.clientX;
+                ly = e.clientY;
+                if (now - lastTime < 28) return;
+                lastTime = now;
+                burst(e.clientX, e.clientY);
+            }, { passive: true });
+
+            doc.addEventListener("click", (e) => {
+                for (let i = 0; i < 8; i++) {
+                    setTimeout(() => {
+                        particle(
+                            e.clientX + (Math.random() - 0.5) * 50,
+                            e.clientY + (Math.random() - 0.5) * 50,
+                            "star"
+                        );
+                    }, i * 40);
+                }
+            }, { passive: true });
+        })();
         </script>
         """,
         height=0,
@@ -685,6 +820,7 @@ def run_detection(email: str, model, vectorizer):
 
 TEXTURE_URI = get_theme_texture_uri()
 inject_css(st.session_state.theme, TEXTURE_URI)
+inject_cursor_stars()
 
 # ---------------- OPENING SPLASH ---------------- #
 
@@ -723,29 +859,25 @@ if not st.session_state.splash_done:
     )
     if st.button("🚀 Launch Dashboard", type="primary", use_container_width=True):
         st.session_state.splash_done = True
+        st.session_state.just_launched = True
+        st.session_state.last_result = None
         st.rerun()
     st.stop()
 
-inject_cursor_stars()
-
-# ---------------- TOP BAR ---------------- #
+# ---------------- TOP BAR (single theme button, top only) ---------------- #
 
 theme_label = "🌙 Switch to Dark" if st.session_state.theme == "cyber" else "✨ Switch to Cyber"
-st.markdown(
-    f"""
-    <div class="top-bar">
-        <span class="theme-pill" id="theme-hint">{theme_label}</span>
-        <span class="brand-name">Arsh Mohan Nishant</span>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-tb1, tb2 = st.columns([1, 4])
-with tb1:
+nav_left, nav_mid, nav_right = st.columns([1.4, 4, 1.4])
+with nav_left:
     if st.button(theme_label, key="theme_toggle"):
         st.session_state.theme = "dark" if st.session_state.theme == "cyber" else "cyber"
         st.rerun()
+with nav_right:
+    st.markdown(
+        '<p class="brand-name">Arsh Mohan Nishant</p>',
+        unsafe_allow_html=True,
+    )
+st.markdown('<div class="nav-spacer"></div>', unsafe_allow_html=True)
 
 # ---------------- HERO ---------------- #
 
@@ -778,18 +910,26 @@ left, right = st.columns([1.15, 0.85], gap="large")
 
 with left:
     st.markdown('<div class="panel-left">', unsafe_allow_html=True)
-    st.markdown('<div class="glass">', unsafe_allow_html=True)
-    st.markdown("#### 🔬 Analyze Email")
+    reveal_cls = "mail-writer-reveal" if st.session_state.just_launched else ""
+    st.markdown(
+        f'<div class="glass mail-writer-box {reveal_cls}">',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        '<p class="mail-writer-label">✉️ Write or paste your email here</p>',
+        unsafe_allow_html=True,
+    )
 
     email = st.text_area(
         "Email content",
-        value=st.session_state.email_text,
-        height=220,
-        placeholder="Paste email text here to scan for spam...",
+        height=320,
+        placeholder="Paste your full email message here...\n\nExample: Dear user, you have won a prize...",
         key="email_input",
         label_visibility="collapsed",
     )
-    st.session_state.email_text = email
+
+    if st.session_state.just_launched:
+        st.session_state.just_launched = False
 
     c1, c2 = st.columns(2)
     with c1:
@@ -825,7 +965,8 @@ with left:
         is_spam, msg, prob = st.session_state.last_result
         render_result(is_spam, msg, prob)
 
-    st.markdown("</div></div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 with right:
     st.markdown('<div class="panel-right">', unsafe_allow_html=True)
