@@ -240,15 +240,31 @@ html, body, [class*="css"] {{
 
 .block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type .stButton > button {{
     width: auto !important;
-    min-width: 10rem;
+    min-width: 10rem !important;
     height: 2.4rem !important;
     font-size: 0.82rem !important;
     padding: 0 1rem !important;
+
     background: linear-gradient(135deg, {accent}, {accent2}) !important;
+    background-color: {accent} !important;
+
     color: white !important;
+    -webkit-text-fill-color: white !important;
+
     border: none !important;
     border-radius: 14px !important;
+
+    opacity: 1 !important;
+    filter: none !important;
+
     box-shadow: 0 0 15px {glow} !important;
+
+    transition: all 0.25s ease !important;
+}}
+
+.block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type .stButton > button:hover {{
+    transform: translateY(-1px);
+    opacity: 1 !important;
 }}
 .nav-spacer {{
     height: 3.6rem;
@@ -331,19 +347,25 @@ section.main > div {{
 }}
 
 .splash-hero-wrap {{
-    border-radius: 20px;
+    width: 72%;
+    margin: 1rem auto 1.2rem auto;
+    border-radius: 24px;
     overflow: hidden;
-    margin: 0 auto 0.8rem auto;
-    border: 1px solid rgba(139, 92, 246, 0.35);
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35), 0 0 35px {glow};
-    animation: fadeUp 1.1s ease;
-    max-width: 78%;
+
+    border: 1px solid rgba(139, 92, 246, 0.25);
+
+    box-shadow:
+        0 20px 45px rgba(0,0,0,0.28),
+        0 0 25px {glow};
+
+    backdrop-filter: blur(10px);
+
+    animation: fadeUp 1s ease;
 }}
 
 .splash-hero-wrap img {{
     width: 100%;
-    max-height: 340px;
-    min-height: 220px;
+    height: 320px;
     object-fit: cover;
     display: block;
 }}
@@ -373,7 +395,7 @@ section.main > div {{
     color: {sub_color};
     font-size: 1.05rem;
     line-height: 1.6;
-    margin: 0.5rem 0 0.8rem 0;
+    margin: 0.45rem 0 0.7rem 0;
 }}
 
 .splash-launch-btn button {{
