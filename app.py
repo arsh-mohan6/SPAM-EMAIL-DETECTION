@@ -285,45 +285,7 @@ html, body, [class*="css"] {{
 
     box-shadow: 0 0 28px {glow} !important;
 }}
-.fullscreen-btn {
 
-    position: fixed;
-
-    bottom: 22px;
-
-    left: 22px;
-
-    z-index: 99999;
-
-    background: linear-gradient(
-        135deg,
-        {accent},
-        {accent2}
-    );
-
-    color: white;
-
-    border: none;
-
-    border-radius: 14px;
-
-    padding: 0.9rem 1.2rem;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    box-shadow: 0 0 18px {glow};
-
-    transition: all 0.25s ease;
-}
-
-.fullscreen-btn:hover {
-
-    transform: translateY(-2px);
-
-    box-shadow: 0 0 30px {glow};
-}
 .nav-spacer {{
     height: 3.6rem;
 }}
