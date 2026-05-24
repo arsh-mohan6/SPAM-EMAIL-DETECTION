@@ -28,7 +28,7 @@ SCAN_MESSAGES = [
 ]
 
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, ttl=0)
 def get_theme_texture_uri(theme: str) -> str | None:
     """Compress theme image once per theme so the page stays fast."""
     path = AESTHETIC_TEXTURE if theme == "aesthetic" else DARK_TEXTURE
