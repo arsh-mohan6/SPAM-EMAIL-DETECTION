@@ -943,10 +943,17 @@ with left:
         st.markdown("</div>", unsafe_allow_html=True)
     with c2:
         st.markdown('<div class="btn-clear">', unsafe_allow_html=True)
-        if st.button("✕ Clear", use_container_width=True):
-            st.session_state["email_input"] = ""
+
+        def clear_text():
+            st.session_state.email_input = ""
             st.session_state.last_result = None
-            st.rerun()
+
+        st.button(
+            "✕ Clear",
+            use_container_width=True,
+            on_click=clear_text
+        )
+
         st.markdown("</div>", unsafe_allow_html=True)
 
     if analyze:
