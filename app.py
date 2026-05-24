@@ -212,13 +212,25 @@ html, body, [class*="css"] {{
     left: 0;
     right: 0;
     z-index: 1000;
-    width: 100%;
-    max-width: 100%;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: calc(50% - 50vw) !important;
     background: {nav_bg};
     backdrop-filter: blur(14px);
     border-bottom: 1px solid {nav_border};
-    padding: 0.4rem 1.5rem 0.55rem 1.5rem;
-    margin: 0 !important;
+    padding: 0.55rem 2rem 0.65rem 2rem !important;
+    box-sizing: border-box;
+}}
+
+.block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type [data-testid="column"]:first-child {{
+    display: flex;
+    justify-content: flex-start;
+}}
+
+.block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type [data-testid="column"]:last-child {{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }}
 
 .block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type [data-testid="column"]:last-child p {{
@@ -240,10 +252,31 @@ html, body, [class*="css"] {{
 
 .brand-name {{
     font-weight: 700;
-    font-size: 0.92rem;
+    font-size: 1rem;
     letter-spacing: 0.03em;
     color: {accent};
     text-shadow: 0 0 18px {glow};
+    margin: 0;
+    white-space: nowrap;
+}}
+
+.brand-row {{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}}
+
+.home-btn button {{
+    width: auto !important;
+    min-width: 4.5rem !important;
+    height: 2.2rem !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    background: rgba(124, 58, 237, 0.35) !important;
+    border: 1px solid {accent} !important;
+    color: {accent} !important;
 }}
 
 .theme-pill {{
@@ -259,11 +292,15 @@ html, body, [class*="css"] {{
 }}
 
 .block-container {{
-    max-width: 1100px;
-    padding-top: 5.5rem;
-    padding-bottom: 3rem;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 5rem 2.5rem 3rem 2.5rem !important;
     position: relative;
     z-index: 2;
+}}
+
+section.main > div {{
+    max-width: 100% !important;
 }}
 
 .hero-wrap {{
@@ -299,8 +336,8 @@ html, body, [class*="css"] {{
 
 .splash-hero-wrap img {{
     width: 100%;
-    max-height: min(52vh, 520px);
-    min-height: 280px;
+    max-height: min(68vh, 640px);
+    min-height: 340px;
     object-fit: cover;
     display: block;
 }}
@@ -445,14 +482,25 @@ html, body, [class*="css"] {{
     margin: 0.5rem 0 0 1.1rem;
 }}
 
-.mail-writer-box {{
-    margin-top: 0.5rem;
+div[data-testid="stTextArea"] {{
+    width: 100% !important;
+    margin: 0 0 1rem 0 !important;
+    background: {glass_bg};
+    backdrop-filter: blur(18px);
+    border: 1px solid {glass_border};
+    border-radius: 20px;
+    padding: 0.25rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 }}
 
-.mail-writer-reveal {{
+div[data-testid="stTextArea"].writer-reveal {{
     animation: writerReveal 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    opacity: 0;
-    transform: translateY(40px) scale(0.96);
+}}
+
+div[data-testid="stTextArea"] > div {{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }}
 
 @keyframes writerReveal {{
@@ -473,34 +521,34 @@ html, body, [class*="css"] {{
     }}
 }}
 
-div[data-testid="stTextArea"] {{
-    margin-top: 0 !important;
-}}
-
-div[data-testid="stTextArea"] label {{
+div[data-testid="stTextArea"] label,
+div[data-testid="stTextArea"] [data-testid="stWidgetLabel"],
+div[data-testid="stTextArea"] > label {{
     display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    visibility: hidden !important;
 }}
 
 div[data-testid="stTextArea"] textarea {{
     background: {textarea_bg} !important;
     color: {app_color} !important;
-    border: 2px solid rgba(139, 92, 246, 0.4) !important;
-    border-radius: 18px !important;
-    font-size: 1.05rem !important;
-    line-height: 1.55 !important;
-    min-height: 380px !important;
-    padding: 1.1rem 1.2rem !important;
+    border: 2px solid rgba(139, 92, 246, 0.45) !important;
+    border-radius: 16px !important;
+    font-size: 1.12rem !important;
+    line-height: 1.6 !important;
+    min-height: 420px !important;
+    height: 420px !important;
+    width: 100% !important;
+    padding: 1.25rem 1.35rem !important;
     transition: box-shadow 0.35s ease, border-color 0.35s ease !important;
+    box-sizing: border-box !important;
 }}
 
 div[data-testid="stTextArea"] textarea:focus {{
     border-color: {accent} !important;
     box-shadow: 0 0 24px {glow} !important;
-}}
-
-div[data-testid="stTextArea"] label {{
-    color: {accent} !important;
-    font-weight: 600 !important;
 }}
 
 .btn-analyze button {{
@@ -932,6 +980,12 @@ def toggle_theme():
     )
 
 
+def go_home():
+    st.session_state.splash_done = False
+    st.session_state.last_result = None
+    st.session_state.just_launched = False
+
+
 TEXTURE_URI = get_theme_texture_uri(st.session_state.theme)
 inject_css(st.session_state.theme, TEXTURE_URI)
 inject_cursor_stars()
@@ -941,7 +995,7 @@ inject_cursor_stars()
 if not st.session_state.splash_done:
     st.markdown('<div class="splash-overlay"></div>', unsafe_allow_html=True)
 
-    splash_left, splash_mid, splash_right = st.columns([1.2, 2, 1.2])
+    splash_left, splash_mid, splash_right = st.columns([1, 2, 1])
     with splash_left:
         splash_theme_label = (
             "Switch to Dark" if st.session_state.theme == "aesthetic" else "Switch to Aesthetic"
@@ -953,6 +1007,20 @@ if not st.session_state.splash_done:
             "Arsh Mohan Nishant</p>",
             unsafe_allow_html=True,
         )
+
+    st.markdown(
+        """
+        <style>
+        .block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type {
+            position: fixed !important;
+            width: 100vw !important;
+            margin-left: calc(50% - 50vw) !important;
+            padding: 0.55rem 2rem !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
     st.markdown(
         '<h1 class="splash-page-title">AI Spam Email Detection</h1>',
@@ -988,14 +1056,20 @@ if not st.session_state.splash_done:
 theme_label = (
     "Switch to Dark" if st.session_state.theme == "aesthetic" else "Switch to Aesthetic"
 )
-nav_left, nav_mid, nav_right = st.columns([1.4, 4, 1.4])
+nav_left, nav_mid, nav_right = st.columns([1, 4, 1])
 with nav_left:
     st.button(theme_label, key="theme_toggle", on_click=toggle_theme)
 with nav_right:
-    st.markdown(
-        '<p class="brand-name">Arsh Mohan Nishant</p>',
-        unsafe_allow_html=True,
-    )
+    brand_a, brand_b = st.columns([0.45, 0.55])
+    with brand_a:
+        st.markdown('<div class="home-btn">', unsafe_allow_html=True)
+        st.button("Home", key="home_btn", on_click=go_home)
+        st.markdown("</div>", unsafe_allow_html=True)
+    with brand_b:
+        st.markdown(
+            '<div class="brand-row"><p class="brand-name">Arsh Mohan Nishant</p></div>',
+            unsafe_allow_html=True,
+        )
 st.markdown('<div class="nav-spacer"></div>', unsafe_allow_html=True)
 
 st.markdown(
@@ -1003,69 +1077,66 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ---------------- MAIN PANELS ---------------- #
+# ---------------- MAIN PANELS (full width) ---------------- #
 
 model, vectorizer = load_models()
 
-left, right = st.columns([1.15, 0.85], gap="large")
-
-with left:
-    st.markdown('<div class="panel-left">', unsafe_allow_html=True)
-    reveal_cls = "mail-writer-reveal" if st.session_state.just_launched else ""
-    st.markdown(
-        f'<div class="glass mail-writer-box {reveal_cls}">',
-        unsafe_allow_html=True,
-    )
-    email = st.text_area(
-        "Email content",
-        height=400,
-        placeholder="Write or paste your full email here...\n\nExample: Dear user, you have won a prize...",
-        key="email_input",
-        label_visibility="collapsed",
-    )
-
-    if st.session_state.just_launched:
-        st.session_state.just_launched = False
-
-    c1, c2 = st.columns(2)
-    with c1:
-        st.markdown('<div class="btn-analyze">', unsafe_allow_html=True)
-        analyze = st.button("Analyze", type="primary", use_container_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
-    with c2:
-        st.markdown('<div class="btn-clear">', unsafe_allow_html=True)
-
-        def clear_text():
-            st.session_state.email_input = ""
-            st.session_state.last_result = None
-
-        st.button("Clear", use_container_width=True, on_click=clear_text)
-
-        st.markdown("</div>", unsafe_allow_html=True)
-
-    if analyze:
-        if not email.strip():
-            st.warning("Please enter an email to analyze.")
-        else:
-            scan_slot = st.empty()
-            show_scan_animation(scan_slot)
-            scan_slot.empty()
-            is_spam, msg, prob = run_detection(email, model, vectorizer)
-            st.session_state.last_result = (is_spam, msg, prob)
-
-    if st.session_state.last_result:
-        is_spam, msg, prob = st.session_state.last_result
-        render_result(is_spam, msg, prob)
-
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with right:
-    st.markdown('<div class="panel-right">', unsafe_allow_html=True)
+if st.session_state.just_launched:
     st.markdown(
         """
-        <div class="glass">
-            <h3> Cybersecurity Engine</h3>
+        <style>
+        div[data-testid="stTextArea"] {
+            animation: writerReveal 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.session_state.just_launched = False
+
+email = st.text_area(
+    "Email",
+    height=420,
+    placeholder="Write or paste your full email here...\n\nExample: Dear user, you have won a prize...",
+    key="email_input",
+    label_visibility="collapsed",
+)
+
+btn1, btn2, btn3 = st.columns([1, 1, 4])
+with btn1:
+    st.markdown('<div class="btn-analyze">', unsafe_allow_html=True)
+    analyze = st.button("Analyze", type="primary", use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+with btn2:
+    st.markdown('<div class="btn-clear">', unsafe_allow_html=True)
+
+    def clear_text():
+        st.session_state.email_input = ""
+        st.session_state.last_result = None
+
+    st.button("Clear", use_container_width=True, on_click=clear_text)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+if analyze:
+    if not email.strip():
+        st.warning("Please enter an email to analyze.")
+    else:
+        scan_slot = st.empty()
+        show_scan_animation(scan_slot)
+        scan_slot.empty()
+        is_spam, msg, prob = run_detection(email, model, vectorizer)
+        st.session_state.last_result = (is_spam, msg, prob)
+
+if st.session_state.last_result:
+    is_spam, msg, prob = st.session_state.last_result
+    render_result(is_spam, msg, prob)
+
+info1, info2 = st.columns(2, gap="large")
+with info1:
+    st.markdown(
+        """
+        <div class="glass panel-right">
+            <h3>Cybersecurity Engine</h3>
             <ul>
                 <li>Logistic Regression AI Model</li>
                 <li>TF-IDF Text Vectorization</li>
@@ -1077,10 +1148,11 @@ with right:
         """,
         unsafe_allow_html=True,
     )
+with info2:
     st.markdown(
         """
-        <div class="glass" style="margin-top:1rem;">
-            <h3> Threat Levels</h3>
+        <div class="glass panel-right">
+            <h3>Threat Levels</h3>
             <ul>
                 <li><strong style="color:#ef4444">SPAM</strong> — High risk, suspicious content</li>
                 <li><strong style="color:#10b981">HAM</strong> — Safe, legitimate email</li>
@@ -1089,7 +1161,6 @@ with right:
         """,
         unsafe_allow_html=True,
     )
-    st.markdown("</div>", unsafe_allow_html=True)
 
 # ---------------- FOOTER ---------------- #
 
