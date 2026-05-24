@@ -863,9 +863,9 @@ div[data-testid="stTextArea"] textarea:focus {{
     0% {{ opacity: 1; }}
     100% {{ opacity: 0; visibility: hidden; }}
 }}
-button[title="View fullscreen"] {
+button[title="View fullscreen"] {{
     display: none !important;
-}
+}}
 @media (max-width: 768px) {{
     .block-container {{ padding-top: 4.5rem; }}
     .hero-card {{ margin-top: -2rem; padding: 1.2rem; }}
