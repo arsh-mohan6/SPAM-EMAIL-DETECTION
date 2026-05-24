@@ -412,27 +412,37 @@ section.main > div {{
 }}
 
 .splash-launch-btn button {{
-    width: 240px !important;
-    height: 3rem !important;
 
-    border-radius: 14px !important;
+    width: 100% !important;
+    height: 3.6rem !important;
 
-    font-size: 1rem !important;
+    border-radius: 18px !important;
+
+    font-size: 1.08rem !important;
     font-weight: 700 !important;
+    letter-spacing: 0.03em;
 
     background: linear-gradient(135deg, {accent}, {accent2}) !important;
 
+    color: white !important;
+
     border: none !important;
 
-    box-shadow: 0 0 20px {glow} !important;
+    box-shadow:
+        0 0 18px {glow},
+        0 0 35px rgba(139,92,246,0.28) !important;
 
-    transition: all 0.3s ease !important;
+    transition: all 0.28s ease !important;
 }}
 
 .splash-launch-btn button:hover {{
-    transform: translateY(-2px) scale(1.03);
-}}
 
+    transform: translateY(-3px) scale(1.03);
+
+    box-shadow:
+        0 0 25px {glow},
+        0 0 45px rgba(139,92,246,0.45) !important;
+}}
 .dashboard-title {{
     text-align: center;
     font-size: 1.75rem;
@@ -1105,13 +1115,19 @@ if not st.session_state.splash_done:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="splash-launch-btn">', unsafe_allow_html=True)
-    if st.button("Launch"):
-        st.session_state.splash_done = True
-        st.session_state.just_launched = True
-        st.session_state.last_result = None
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+    launch_left, launch_center, launch_right = st.columns([2, 1.2, 2])
+
+    with launch_center:
+
+        st.markdown('<div class="splash-launch-btn">', unsafe_allow_html=True)
+
+        if st.button("🚀 Launch", use_container_width=True):
+            st.session_state.splash_done = True
+            st.session_state.just_launched = True
+            st.session_state.last_result = None
+            st.rerun()
+
+        st.markdown("</div>", unsafe_allow_html=True)
     st.stop()
 
 # ---------------- TOP BAR (single theme button, top only) ---------------- #
