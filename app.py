@@ -367,11 +367,16 @@ section.main > div {{
     animation: fadeUp 1s ease;
 }}
 .splash-hero-wrap img {{
-    width: 100%;
-    max-height: 320px;
-    height: auto;
-    object-fit: contain;
-    display: block;
+    width: 760px !important;
+    max-width: 90vw !important;
+
+    display: block !important;
+    margin: 0 auto !important;
+
+    border-radius: 20px;
+
+    height: auto !important;
+    object-fit: cover;
 }}
 
 .splash-page-title {{
@@ -402,15 +407,32 @@ section.main > div {{
     margin: 0.45rem 0 0.7rem 0;
 }}
 
-.splash-launch-btn button {{
-    font-size: 1.05rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.04em;
-    height: 2.7rem !important;
+.splash-launch-btn {{
+    display: flex;
+    justify-content: center;
+    margin-top: 1.2rem;
+}}
 
-    max-width: 320px !important;
-    margin: auto !important;
-    display: block !important;
+.splash-launch-btn button {{
+    width: 240px !important;
+    height: 3rem !important;
+
+    border-radius: 14px !important;
+
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+
+    background: linear-gradient(135deg, {accent}, {accent2}) !important;
+
+    border: none !important;
+
+    box-shadow: 0 0 20px {glow} !important;
+
+    transition: all 0.3s ease !important;
+}}
+
+.splash-launch-btn button:hover {{
+    transform: translateY(-2px) scale(1.03);
 }}
 
 .dashboard-title {{
@@ -1081,7 +1103,7 @@ if not st.session_state.splash_done:
     )
 
     st.markdown('<div class="splash-launch-btn">', unsafe_allow_html=True)
-    if st.button("Launch", type="primary"):
+    if st.button("Launch"):
         st.session_state.splash_done = True
         st.session_state.just_launched = True
         st.session_state.last_result = None
