@@ -386,18 +386,6 @@ section.main > div {{
 
     object-fit: cover !important;
 }}
-.custom-splash-img {{
-
-    width: 100% !important;
-
-    max-width: 760px !important;
-
-    border-radius: 24px !important;
-
-    display: block !important;
-
-    margin: auto !important;
-}}
 
 .splash-page-title {{
     text-align: center;
