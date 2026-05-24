@@ -16,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent
 ASSETS = BASE_DIR / ".md"
 OPENING_IMAGE = ASSETS / "opening_image.webp"
 DARK_TEXTURE = ASSETS / "videoframe_4444.png"
-AESTHETIC_TEXTURE = ASSETS / "asthtic.png"
+AESTHETIC_TEXTURE = ASSETS / "Arsh_Mohan.png"
 
 SCAN_MESSAGES = [
     "Reading email content...",
@@ -347,7 +347,7 @@ section.main > div {{
 }}
 
 .splash-hero-wrap {{
-    width: 72%;
+    width: fit-content;
     margin: 1rem auto 1.2rem auto;
     border-radius: 24px;
     overflow: hidden;
@@ -362,11 +362,11 @@ section.main > div {{
 
     animation: fadeUp 1s ease;
 }}
-
 .splash-hero-wrap img {{
     width: 100%;
-    height: 320px;
-    object-fit: cover;
+    max-height: 320px;
+    height: auto;
+    object-fit: contain;
     display: block;
 }}
 
@@ -1059,7 +1059,7 @@ if not st.session_state.splash_done:
 
     st.markdown('<div class="splash-hero-wrap">', unsafe_allow_html=True)
     if OPENING_IMAGE.exists():
-        st.image(str(OPENING_IMAGE), use_container_width=True)
+        st.image(str(OPENING_IMAGE), width=950)
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown(
