@@ -386,7 +386,7 @@ section.main > div {{
 
     object-fit: cover !important;
 }}
-.custom-splash-img {
+.custom-splash-img {{
 
     width: 100% !important;
 
@@ -397,7 +397,7 @@ section.main > div {{
     display: block !important;
 
     margin: auto !important;
-}
+}}
 
 .splash-page-title {{
     text-align: center;
