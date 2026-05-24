@@ -274,9 +274,10 @@ html, body, [class*="css"] {{
     height: 2.2rem !important;
     font-size: 0.85rem !important;
     font-weight: 700 !important;
-    background: rgba(124, 58, 237, 0.35) !important;
-    border: 1px solid {accent} !important;
-    color: {accent} !important;
+    background: linear-gradient(135deg, {accent}, {accent2}) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 0 15px {glow} !important;
 }}
 
 .theme-pill {{
@@ -336,8 +337,8 @@ section.main > div {{
 
 .splash-hero-wrap img {{
     width: 100%;
-    max-height: min(68vh, 640px);
-    min-height: 340px;
+    max-height: min(52vh, 480px);
+    min-height: 240px;
     object-fit: cover;
     display: block;
 }}
@@ -538,8 +539,8 @@ div[data-testid="stTextArea"] textarea {{
     border-radius: 16px !important;
     font-size: 1.12rem !important;
     line-height: 1.6 !important;
-    min-height: 420px !important;
-    height: 420px !important;
+    min-height: 350px !important;
+    height: 350px !important;
     width: 100% !important;
     padding: 1.25rem 1.35rem !important;
     transition: box-shadow 0.35s ease, border-color 0.35s ease !important;
@@ -1060,16 +1061,12 @@ nav_left, nav_mid, nav_right = st.columns([1, 4, 1])
 with nav_left:
     st.button(theme_label, key="theme_toggle", on_click=toggle_theme)
 with nav_right:
-    brand_a, brand_b = st.columns([0.45, 0.55])
-    with brand_a:
-        st.markdown('<div class="home-btn">', unsafe_allow_html=True)
-        st.button("Home", key="home_btn", on_click=go_home)
-        st.markdown("</div>", unsafe_allow_html=True)
-    with brand_b:
-        st.markdown(
-            '<div class="brand-row"><p class="brand-name">Arsh Mohan Nishant</p></div>',
-            unsafe_allow_html=True,
-        )
+    st.markdown('<div class="home-btn">', unsafe_allow_html=True)
+
+    if st.button("Arsh Mohan Nishant", key="home_btn"):
+        go_home()
+
+    st.markdown("</div>", unsafe_allow_html=True)
 st.markdown('<div class="nav-spacer"></div>', unsafe_allow_html=True)
 
 st.markdown(
