@@ -244,8 +244,12 @@ html, body, [class*="css"] {{
     height: 2.4rem !important;
     font-size: 0.82rem !important;
     padding: 0 1rem !important;
+    background: linear-gradient(135deg, {accent}, {accent2}) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 14px !important;
+    box-shadow: 0 0 15px {glow} !important;
 }}
-
 .nav-spacer {{
     height: 3.6rem;
 }}
@@ -327,18 +331,19 @@ section.main > div {{
 }}
 
 .splash-hero-wrap {{
-    border-radius: 24px;
+    border-radius: 20px;
     overflow: hidden;
-    margin: 0 0 1.2rem 0;
-    border: 1px solid rgba(139, 92, 246, 0.45);
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5), 0 0 50px {glow};
+    margin: 0 auto 0.8rem auto;
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35), 0 0 35px {glow};
     animation: fadeUp 1.1s ease;
+    max-width: 78%;
 }}
 
 .splash-hero-wrap img {{
     width: 100%;
-    max-height: min(52vh, 480px);
-    min-height: 240px;
+    max-height: 340px;
+    min-height: 220px;
     object-fit: cover;
     display: block;
 }}
@@ -368,13 +373,14 @@ section.main > div {{
     color: {sub_color};
     font-size: 1.05rem;
     line-height: 1.6;
-    margin: 1rem 0 1.25rem 0;
+    margin: 0.5rem 0 0.8rem 0;
 }}
 
 .splash-launch-btn button {{
     font-size: 1.05rem !important;
     font-weight: 700 !important;
     letter-spacing: 0.04em;
+    height: 2.7rem !important;
 }}
 
 .dashboard-title {{
@@ -570,12 +576,13 @@ div[data-testid="stTextArea"] textarea:focus {{
 }}
 
 .btn-clear button {{
-    background: rgba(30, 41, 59, 0.9) !important;
-    border: 1px solid rgba(148, 163, 184, 0.35) !important;
-    color: #e2e8f0 !important;
+    background: linear-gradient(135deg, {accent}, {accent2}) !important;
+    border: none !important;
+    color: white !important;
     font-weight: 600 !important;
     border-radius: 14px !important;
     height: 3rem !important;
+    box-shadow: 0 0 14px {glow} !important;
     transition: all 0.25s ease !important;
 }}
 
@@ -1093,7 +1100,7 @@ if st.session_state.just_launched:
 
 email = st.text_area(
     "Email",
-    height=420,
+    height=300,
     placeholder="Write or paste your full email here...\n\nExample: Dear user, you have won a prize...",
     key="email_input",
     label_visibility="collapsed",
@@ -1108,7 +1115,7 @@ with btn2:
     st.markdown('<div class="btn-clear">', unsafe_allow_html=True)
 
     def clear_text():
-        st.session_state.email_input = ""
+        st.session_state["email_input"] = ""
         st.session_state.last_result = None
 
     st.button("Clear", use_container_width=True, on_click=clear_text)
