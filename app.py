@@ -1121,7 +1121,7 @@ if not st.session_state.splash_done:
 
         st.markdown('<div class="splash-launch-btn">', unsafe_allow_html=True)
 
-        if st.button("🚀 Launch", use_container_width=True):
+        if st.button(" Launch", use_container_width=True):
             st.session_state.splash_done = True
             st.session_state.just_launched = True
             st.session_state.last_result = None
