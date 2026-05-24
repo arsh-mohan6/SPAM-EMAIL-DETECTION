@@ -347,14 +347,24 @@ section.main > div {{
 }}
 
 .splash-hero-wrap {{
-    width: fit-content;
-    margin: 1rem auto 1.2rem auto;
-    
+    width: 100%;
     display: flex;
     justify-content: center;
-    
-    border-radius: 24px;
-    overflow: hidden;
+    align-items: center;
+
+    margin: 1rem auto 1.5rem auto;
+
+    animation: fadeUp 1s ease;
+}}
+
+.splash-hero-wrap img {{
+    width: 100% !important;
+    max-width: 760px !important;
+
+    display: block !important;
+    margin: auto !important;
+
+    border-radius: 24px !important;
 
     border: 1px solid rgba(139, 92, 246, 0.25);
 
@@ -362,21 +372,9 @@ section.main > div {{
         0 20px 45px rgba(0,0,0,0.28),
         0 0 25px {glow};
 
-    backdrop-filter: blur(10px);
-
-    animation: fadeUp 1s ease;
-}}
-.splash-hero-wrap img {{
-    width: 760px !important;
-    max-width: 90vw !important;
-
-    display: block !important;
-    margin: 0 auto !important;
-
-    border-radius: 20px;
-
     height: auto !important;
-    object-fit: cover;
+
+    object-fit: cover !important;
 }}
 
 .splash-page-title {{
@@ -1087,10 +1085,15 @@ if not st.session_state.splash_done:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="splash-hero-wrap">', unsafe_allow_html=True)
-    if OPENING_IMAGE.exists():
-        st.image(str(OPENING_IMAGE), width=760)
-    st.markdown("</div>", unsafe_allow_html=True)
+    hero_left, hero_center, hero_right = st.columns([1, 2, 1])
+
+    with hero_center:
+        st.markdown('<div class="splash-hero-wrap">', unsafe_allow_html=True)
+
+        if OPENING_IMAGE.exists():
+            st.image(str(OPENING_IMAGE), use_container_width=True)
+
+        st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown(
         """
