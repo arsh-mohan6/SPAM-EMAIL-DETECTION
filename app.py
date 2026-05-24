@@ -863,53 +863,6 @@ div[data-testid="stTextArea"] textarea:focus {{
     0% {{ opacity: 1; }}
     100% {{ opacity: 0; visibility: hidden; }}
 }}
-.fullscreen-wrap {{
-
-    display: flex;
-
-    justify-content: center;
-
-    margin-top: 0.6rem;
-
-    margin-bottom: 1rem;
-}}
-
-.fullscreen-btn {{
-
-    background: linear-gradient(135deg, #7c3aed, #db2777);
-
-    color: white;
-
-    border: none;
-
-    border-radius: 16px;
-
-    padding: 0.9rem 1.6rem;
-
-    font-size: 1rem;
-
-    font-weight: 700;
-
-    letter-spacing: 0.03em;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 0 18px rgba(124,58,237,0.35),
-        0 0 35px rgba(219,39,119,0.22);
-
-    transition: all 0.28s ease;
-
-    backdrop-filter: blur(12px);
-}}
-.fullscreen-btn:hover {{
-
-    transform: translateY(-3px) scale(1.04);
-
-    box-shadow:
-        0 0 28px rgba(124,58,237,0.55),
-        0 0 45px rgba(219,39,119,0.35);
-}}
 button[title="View fullscreen"] {{
     display: none !important;
 }}
@@ -1258,33 +1211,6 @@ with nav_right:
     st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown('<div class="nav-spacer"></div>', unsafe_allow_html=True)
-# FULLSCREEN BUTTON YAHAN ADD HOGA
-st.markdown(
-    """
-    <div class="fullscreen-wrap">
-        <button class="fullscreen-btn" onclick="toggleFullscreen()">
-            ⛶ Full Screen
-        </button>
-    </div>
-
-    <script>
-    function toggleFullscreen() {
-
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
-        }
-
-        else {
-
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
-        }
-    }
-    </script>
-    """,
-    unsafe_allow_html=True,
-)
 st.markdown(
     '<h2 class="dashboard-title">AI Spam Email Detection</h2>',
     unsafe_allow_html=True,
