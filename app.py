@@ -863,7 +863,9 @@ div[data-testid="stTextArea"] textarea:focus {{
     0% {{ opacity: 1; }}
     100% {{ opacity: 0; visibility: hidden; }}
 }}
-
+button[title="View fullscreen"] {
+    display: none !important;
+}
 @media (max-width: 768px) {{
     .block-container {{ padding-top: 4.5rem; }}
     .hero-card {{ margin-top: -2rem; padding: 1.2rem; }}
@@ -1160,18 +1162,9 @@ if not st.session_state.splash_done:
 
         if OPENING_IMAGE.exists():
 
-            img_bytes = OPENING_IMAGE.read_bytes()
-
-            img_base64 = base64.b64encode(img_bytes).decode()
-
-            st.markdown(
-                f"""
-                <img
-                    src="data:image/webp;base64,{img_base64}"
-                    class="custom-splash-img"
-                >
-                """,
-                unsafe_allow_html=True,
+            st.image(
+                str(OPENING_IMAGE),
+                use_container_width=True
             )
 
         st.markdown("</div>", unsafe_allow_html=True)
