@@ -413,7 +413,11 @@ section.main > div {{
 
 .splash-launch-btn button {{
 
-    width: 100% !important;
+    width: 260px !important;
+    
+    display: block !important;
+    margin: auto !important;
+    
     height: 3.6rem !important;
 
     border-radius: 18px !important;
@@ -600,7 +604,7 @@ div[data-testid="stTextArea"] > label {{
 
 div[data-testid="stTextArea"] textarea {{
     background: {textarea_bg} !important;
-    color: {app_color} !important;
+    color: {"#1e293b" if is_aesthetic else "#e2e8f0"} !important;
     border: 2px solid rgba(139, 92, 246, 0.45) !important;
     border-radius: 16px !important;
     font-size: 1.12rem !important;
@@ -613,11 +617,15 @@ div[data-testid="stTextArea"] textarea {{
     box-sizing: border-box !important;
 }}
 
+div[data-testid="stTextArea"] textarea::placeholder {{
+
+    color: {"rgba(30,41,59,0.55)" if is_aesthetic else "rgba(226,232,240,0.55)"} !important;
+}}
+
 div[data-testid="stTextArea"] textarea:focus {{
     border-color: {accent} !important;
     box-shadow: 0 0 24px {glow} !important;
 }}
-
 .btn-analyze button {{
     background: linear-gradient(90deg, {accent2}, #2563eb, {accent}) !important;
     background-size: 200% 200% !important;
@@ -636,19 +644,49 @@ div[data-testid="stTextArea"] textarea:focus {{
 }}
 
 .btn-clear button {{
-    background: linear-gradient(135deg, {accent}, {accent2}) !important;
-    border: none !important;
-    color: white !important;
-    font-weight: 600 !important;
+
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.88),
+        rgba(255,255,255,0.72)
+    ) !important;
+
+    color: #1e293b !important;
+
+    border: 1px solid rgba(219,39,119,0.28) !important;
+
+    font-weight: 700 !important;
+
     border-radius: 14px !important;
+
     height: 3rem !important;
-    box-shadow: 0 0 14px {glow} !important;
+
+    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 4px 18px rgba(219,39,119,0.16) !important;
+
     transition: all 0.25s ease !important;
 }}
 
 .btn-clear button:hover {{
-    border-color: {accent} !important;
-    box-shadow: 0 0 16px {glow} !important;
+
+    background: linear-gradient(
+        135deg,
+        {accent},
+        {accent2}
+    ) !important;
+
+    color: white !important;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 20px {glow} !important;
+}}
+.btn-clear .stButton > button {{
+    background: rgba(255,255,255,0.88) !important;
+    color: #1e293b !important;
 }}
 
 @keyframes btnShine {{
