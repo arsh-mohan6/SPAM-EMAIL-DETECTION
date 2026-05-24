@@ -15,21 +15,33 @@ from nltk.tokenize import word_tokenize
 BASE_DIR = Path(__file__).resolve().parent
 ASSETS = BASE_DIR / ".md"
 OPENING_IMAGE = ASSETS / "opening_image.webp"
-THEME_TEXTURE = ASSETS / "videoframe_4444.png"
+DARK_TEXTURE = ASSETS / "videoframe_4444.png"
+AESTHETIC_TEXTURE = ASSETS / "asthtic.png"
+
+SCAN_MESSAGES = [
+    "Reading email content...",
+    "Tokenizing words with NLP...",
+    "Scanning for spam keywords...",
+    "Running TF-IDF vectorization...",
+    "AI model analyzing patterns...",
+    "Calculating spam confidence...",
+]
 
 
 @st.cache_data(show_spinner=False)
-def get_theme_texture_uri() -> str | None:
-    """Compress theme PNG once so the page stays fast."""
-    if not THEME_TEXTURE.exists():
+def get_theme_texture_uri(theme: str) -> str | None:
+    """Compress theme image once per theme so the page stays fast."""
+    path = AESTHETIC_TEXTURE if theme == "aesthetic" else DARK_TEXTURE
+    if not path.exists():
         return None
     try:
         from PIL import Image
 
-        img = Image.open(THEME_TEXTURE).convert("RGB")
+        img = Image.open(path).convert("RGB")
         img.thumbnail((1024, 768))
         buf = io.BytesIO()
-        img.save(buf, format="JPEG", quality=42, optimize=True)
+        quality = 48 if theme == "aesthetic" else 42
+        img.save(buf, format="JPEG", quality=quality, optimize=True)
         return f"data:image/jpeg;base64,{base64.b64encode(buf.getvalue()).decode('ascii')}"
     except Exception:
         return None
@@ -47,7 +59,7 @@ st.set_page_config(
 
 defaults = {
     "splash_done": False,
-    "theme": "cyber",
+    "theme": "dark",
     "email_input": "",
     "last_result": None,
     "just_launched": False,
@@ -61,19 +73,43 @@ if "email_text" in st.session_state and not st.session_state.get("email_input"):
     st.session_state.email_input = st.session_state.pop("email_text")
 elif "email_text" in st.session_state:
     del st.session_state["email_text"]
+if st.session_state.get("theme") == "cyber":
+    st.session_state.theme = "aesthetic"
 
 
 def inject_css(theme: str, texture_uri: str | None = None):
-    is_cyber = theme == "cyber"
-    bg = (
-        "linear-gradient(135deg, #030712 0%, #0c1445 35%, #1e1b4b 65%, #0f172a 100%)"
-        if is_cyber
-        else "linear-gradient(160deg, #020617, #0f172a 50%, #111827)"
-    )
-    accent = "#22d3ee" if is_cyber else "#a78bfa"
-    accent2 = "#c026d3" if is_cyber else "#6366f1"
-    glow = "rgba(34, 211, 238, 0.45)" if is_cyber else "rgba(167, 139, 250, 0.45)"
-    tex_opacity = "0.24" if is_cyber else "0.14"
+    is_aesthetic = theme == "aesthetic"
+    if is_aesthetic:
+        bg = "linear-gradient(135deg, #fff7ed 0%, #fce7f3 30%, #e0f2fe 60%, #f5f3ff 100%)"
+        accent = "#db2777"
+        accent2 = "#7c3aed"
+        glow = "rgba(219, 39, 119, 0.35)"
+        tex_opacity = "0.42"
+        app_color = "#1e293b"
+        dim_overlay = "linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0.45))"
+        glass_bg = "rgba(255, 255, 255, 0.78)"
+        glass_border = "rgba(219, 39, 119, 0.25)"
+        sub_color = "#475569"
+        nav_bg = "rgba(255, 255, 255, 0.9)"
+        nav_border = "rgba(219, 39, 119, 0.2)"
+        textarea_bg = "rgba(255, 255, 255, 0.92)"
+        blend_mode = "normal"
+    else:
+        bg = "linear-gradient(160deg, #020617, #0f172a 50%, #111827)"
+        accent = "#a78bfa"
+        accent2 = "#6366f1"
+        glow = "rgba(167, 139, 250, 0.45)"
+        tex_opacity = "0.16"
+        app_color = "#e2e8f0"
+        dim_overlay = "linear-gradient(180deg, rgba(3,7,18,0.55), rgba(3,7,18,0.82))"
+        glass_bg = "rgba(15, 23, 42, 0.55)"
+        glass_border = "rgba(139, 92, 246, 0.28)"
+        sub_color = "#94a3b8"
+        nav_bg = "rgba(3, 7, 18, 0.9)"
+        nav_border = "rgba(139, 92, 246, 0.2)"
+        textarea_bg = "rgba(8, 15, 35, 0.82)"
+        blend_mode = "screen"
+
     texture_css = ""
     texture_html = ""
     if texture_uri:
@@ -88,12 +124,12 @@ def inject_css(theme: str, texture_uri: str | None = None):
     opacity: {tex_opacity};
     z-index: 0;
     pointer-events: none;
-    mix-blend-mode: screen;
+    mix-blend-mode: {blend_mode};
 }}
 .theme-texture-dim {{
     position: fixed;
     inset: 0;
-    background: linear-gradient(180deg, rgba(3,7,18,0.55), rgba(3,7,18,0.82));
+    background: {dim_overlay};
     z-index: 0;
     pointer-events: none;
 }}
@@ -118,7 +154,7 @@ html, body, [class*="css"] {{
     background: {bg};
     background-size: 400% 400%;
     animation: gradientFlow 22s ease infinite;
-    color: #e2e8f0;
+    color: {app_color};
 }}
 
 @keyframes gradientFlow {{
@@ -178,9 +214,9 @@ html, body, [class*="css"] {{
     z-index: 1000;
     width: 100%;
     max-width: 100%;
-    background: rgba(3, 7, 18, 0.9);
+    background: {nav_bg};
     backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    border-bottom: 1px solid {nav_border};
     padding: 0.4rem 1.5rem 0.55rem 1.5rem;
     margin: 0 !important;
 }}
@@ -263,9 +299,53 @@ html, body, [class*="css"] {{
 
 .splash-hero-wrap img {{
     width: 100%;
-    max-height: 420px;
+    max-height: min(52vh, 520px);
+    min-height: 280px;
     object-fit: cover;
     display: block;
+}}
+
+.splash-page-title {{
+    text-align: center;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 800;
+    margin: 0 0 1rem 0;
+    background: linear-gradient(90deg, {accent}, {accent2}, #f0abfc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeUp 0.9s ease;
+}}
+
+.splash-header-row {{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0.75rem;
+    padding: 0 0.25rem;
+}}
+
+.splash-msg {{
+    text-align: center;
+    color: {sub_color};
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin: 1rem 0 1.25rem 0;
+}}
+
+.splash-launch-btn button {{
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em;
+}}
+
+.dashboard-title {{
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0 0 1.25rem 0;
+    color: {accent};
+    text-shadow: 0 0 16px {glow};
 }}
 
 .hero-card {{
@@ -296,7 +376,7 @@ html, body, [class*="css"] {{
 }}
 
 .hero-sub {{
-    color: #94a3b8;
+    color: {sub_color};
     font-size: 1.05rem;
     line-height: 1.65;
     margin: 0.8rem 0 0 0;
@@ -339,9 +419,9 @@ html, body, [class*="css"] {{
 }}
 
 .glass {{
-    background: rgba(15, 23, 42, 0.55);
+    background: {glass_bg};
     backdrop-filter: blur(18px);
-    border: 1px solid rgba(139, 92, 246, 0.28);
+    border: 1px solid {glass_border};
     border-radius: 20px;
     padding: 1.4rem 1.5rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
@@ -360,7 +440,7 @@ html, body, [class*="css"] {{
 }}
 
 .glass ul {{
-    color: #cbd5e1;
+    color: {sub_color};
     line-height: 1.9;
     margin: 0.5rem 0 0 1.1rem;
 }}
@@ -393,23 +473,22 @@ html, body, [class*="css"] {{
     }}
 }}
 
-.mail-writer-label {{
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: 1.15rem;
-    color: {accent};
-    margin: 0 0 0.6rem 0;
-    text-shadow: 0 0 14px {glow};
+div[data-testid="stTextArea"] {{
+    margin-top: 0 !important;
+}}
+
+div[data-testid="stTextArea"] label {{
+    display: none !important;
 }}
 
 div[data-testid="stTextArea"] textarea {{
-    background: rgba(8, 15, 35, 0.82) !important;
-    color: #f8fafc !important;
+    background: {textarea_bg} !important;
+    color: {app_color} !important;
     border: 2px solid rgba(139, 92, 246, 0.4) !important;
     border-radius: 18px !important;
     font-size: 1.05rem !important;
     line-height: 1.55 !important;
-    min-height: 300px !important;
+    min-height: 380px !important;
     padding: 1.1rem 1.2rem !important;
     transition: box-shadow 0.35s ease, border-color 0.35s ease !important;
 }}
@@ -483,6 +562,13 @@ div[data-testid="stTextArea"] label {{
     color: {accent};
     font-weight: 600;
     letter-spacing: 0.05em;
+    min-height: 1.5rem;
+    animation: loaderPulse 1.2s ease-in-out infinite;
+}}
+
+@keyframes loaderPulse {{
+    0%, 100% {{ opacity: 0.75; }}
+    50% {{ opacity: 1; }}
 }}
 
 .result-box {{
@@ -792,8 +878,25 @@ def render_gauge(probability: float):
     )
 
 
+def show_scan_animation(slot) -> None:
+    for msg in SCAN_MESSAGES:
+        slot.markdown(
+            f"""
+            <div class="loader-wrap">
+                <div class="loader-ring"></div>
+                <p class="loader-text">{msg}</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        time.sleep(0.45)
+
+
 def render_result(is_spam: bool, message: str, probability: float):
-    label = "🚨 SPAM DETECTED" if is_spam else "✅ HAM — SAFE EMAIL"
+    if is_spam:
+        label = "SPAM DETECTED — This email looks dangerous"
+    else:
+        label = "HAM — Your email looks safe and legitimate"
     css = "result-spam" if is_spam else "result-safe"
     st.markdown(f'<div class="result-box {css}">{label}</div>', unsafe_allow_html=True)
     render_gauge(probability)
@@ -823,7 +926,13 @@ def run_detection(email: str, model, vectorizer):
 
 # ---------------- STYLES + PARTICLES ---------------- #
 
-TEXTURE_URI = get_theme_texture_uri()
+def toggle_theme():
+    st.session_state.theme = (
+        "dark" if st.session_state.theme == "aesthetic" else "aesthetic"
+    )
+
+
+TEXTURE_URI = get_theme_texture_uri(st.session_state.theme)
 inject_css(st.session_state.theme, TEXTURE_URI)
 inject_cursor_stars()
 
@@ -832,51 +941,56 @@ inject_cursor_stars()
 if not st.session_state.splash_done:
     st.markdown('<div class="splash-overlay"></div>', unsafe_allow_html=True)
 
-    # 1) Opening image first on the page
+    splash_left, splash_mid, splash_right = st.columns([1.2, 2, 1.2])
+    with splash_left:
+        splash_theme_label = (
+            "Switch to Dark" if st.session_state.theme == "aesthetic" else "Switch to Aesthetic"
+        )
+        st.button(splash_theme_label, key="splash_theme_toggle", on_click=toggle_theme)
+    with splash_right:
+        st.markdown(
+            '<p class="brand-name" style="text-align:right;margin-top:0.55rem;">'
+            "Arsh Mohan Nishant</p>",
+            unsafe_allow_html=True,
+        )
+
+    st.markdown(
+        '<h1 class="splash-page-title">AI Spam Email Detection</h1>',
+        unsafe_allow_html=True,
+    )
+
     st.markdown('<div class="splash-hero-wrap">', unsafe_allow_html=True)
     if OPENING_IMAGE.exists():
         st.image(str(OPENING_IMAGE), use_container_width=True)
-    else:
-        st.markdown("### 📧 AI Spam Shield")
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown(
         """
-        <div class="top-bar" style="position:relative;margin-bottom:1rem;">
-            <span class="theme-pill">✨ Cyber AI Theme</span>
-            <span class="brand-name">Arsh Mohan Nishant</span>
-        </div>
+        <p class="splash-msg">
+            Troubled with spam emails? Check instantly whether your mail is
+            <strong>HAM</strong> or <strong>SPAM</strong> using AI-powered detection.
+        </p>
         """,
         unsafe_allow_html=True,
     )
-    st.markdown(
-        """
-        <div class="hero-card">
-            <h1 class="hero-heading">📧 AI Spam Email Detection</h1>
-            <p class="hero-sub">
-                Troubled with spam emails? Check instantly whether your mail is
-                <strong>HAM</strong> or <strong>SPAM</strong> using AI-powered detection.
-            </p>
-            <div class="glow-line"></div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    if st.button("🚀 Launch Dashboard", type="primary", use_container_width=True):
+
+    st.markdown('<div class="splash-launch-btn">', unsafe_allow_html=True)
+    if st.button("Launch", type="primary", use_container_width=True):
         st.session_state.splash_done = True
         st.session_state.just_launched = True
         st.session_state.last_result = None
         st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
     st.stop()
 
 # ---------------- TOP BAR (single theme button, top only) ---------------- #
 
-theme_label = "🌙 Switch to Dark" if st.session_state.theme == "cyber" else "✨ Switch to Cyber"
+theme_label = (
+    "Switch to Dark" if st.session_state.theme == "aesthetic" else "Switch to Aesthetic"
+)
 nav_left, nav_mid, nav_right = st.columns([1.4, 4, 1.4])
 with nav_left:
-    if st.button(theme_label, key="theme_toggle"):
-        st.session_state.theme = "dark" if st.session_state.theme == "cyber" else "cyber"
-        st.rerun()
+    st.button(theme_label, key="theme_toggle", on_click=toggle_theme)
 with nav_right:
     st.markdown(
         '<p class="brand-name">Arsh Mohan Nishant</p>',
@@ -884,28 +998,10 @@ with nav_right:
     )
 st.markdown('<div class="nav-spacer"></div>', unsafe_allow_html=True)
 
-# ---------------- HERO ---------------- #
-
-st.markdown('<div class="hero-wrap">', unsafe_allow_html=True)
-if OPENING_IMAGE.exists():
-    st.image(str(OPENING_IMAGE), use_container_width=True)
-st.markdown("</div>", unsafe_allow_html=True)
-
 st.markdown(
-    """
-    <div class="hero-card">
-        <h1 class="hero-heading">📧 AI Spam Email Detection System</h1>
-        <p class="hero-sub">
-            Troubled with spam emails? Check instantly whether your mail is
-            HAM or SPAM using AI-powered detection.
-        </p>
-        <div class="glow-line"></div>
-    </div>
-    """,
+    '<h2 class="dashboard-title">AI Spam Email Detection</h2>',
     unsafe_allow_html=True,
 )
-
-st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
 # ---------------- MAIN PANELS ---------------- #
 
@@ -920,15 +1016,10 @@ with left:
         f'<div class="glass mail-writer-box {reveal_cls}">',
         unsafe_allow_html=True,
     )
-    st.markdown(
-        '<p class="mail-writer-label">✉️ Write or paste your email here</p>',
-        unsafe_allow_html=True,
-    )
-
     email = st.text_area(
         "Email content",
-        height=320,
-        placeholder="Paste your full email message here...\n\nExample: Dear user, you have won a prize...",
+        height=400,
+        placeholder="Write or paste your full email here...\n\nExample: Dear user, you have won a prize...",
         key="email_input",
         label_visibility="collapsed",
     )
@@ -939,7 +1030,7 @@ with left:
     c1, c2 = st.columns(2)
     with c1:
         st.markdown('<div class="btn-analyze">', unsafe_allow_html=True)
-        analyze = st.button("🔍 Analyze", type="primary", use_container_width=True)
+        analyze = st.button("Analyze", type="primary", use_container_width=True)
         st.markdown("</div>", unsafe_allow_html=True)
     with c2:
         st.markdown('<div class="btn-clear">', unsafe_allow_html=True)
@@ -948,11 +1039,7 @@ with left:
             st.session_state.email_input = ""
             st.session_state.last_result = None
 
-        st.button(
-            "✕ Clear",
-            use_container_width=True,
-            on_click=clear_text
-        )
+        st.button("Clear", use_container_width=True, on_click=clear_text)
 
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -960,16 +1047,9 @@ with left:
         if not email.strip():
             st.warning("Please enter an email to analyze.")
         else:
-            st.markdown(
-                """
-                <div class="loader-wrap">
-                    <div class="loader-ring"></div>
-                    <p class="loader-text">AI SCANNING EMAIL...</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            time.sleep(0.85)
+            scan_slot = st.empty()
+            show_scan_animation(scan_slot)
+            scan_slot.empty()
             is_spam, msg, prob = run_detection(email, model, vectorizer)
             st.session_state.last_result = (is_spam, msg, prob)
 
@@ -985,7 +1065,7 @@ with right:
     st.markdown(
         """
         <div class="glass">
-            <h3>🛡️ Cybersecurity Engine</h3>
+            <h3> Cybersecurity Engine</h3>
             <ul>
                 <li>Logistic Regression AI Model</li>
                 <li>TF-IDF Text Vectorization</li>
@@ -1000,7 +1080,7 @@ with right:
     st.markdown(
         """
         <div class="glass" style="margin-top:1rem;">
-            <h3>📊 Threat Levels</h3>
+            <h3> Threat Levels</h3>
             <ul>
                 <li><strong style="color:#ef4444">SPAM</strong> — High risk, suspicious content</li>
                 <li><strong style="color:#10b981">HAM</strong> — Safe, legitimate email</li>
