@@ -349,6 +349,10 @@ section.main > div {{
 .splash-hero-wrap {{
     width: fit-content;
     margin: 1rem auto 1.2rem auto;
+    
+    display: flex;
+    justify-content: center;
+    
     border-radius: 24px;
     overflow: hidden;
 
@@ -403,6 +407,10 @@ section.main > div {{
     font-weight: 700 !important;
     letter-spacing: 0.04em;
     height: 2.7rem !important;
+
+    max-width: 320px !important;
+    margin: auto !important;
+    display: block !important;
 }}
 
 .dashboard-title {{
@@ -567,8 +575,8 @@ div[data-testid="stTextArea"] textarea {{
     border-radius: 16px !important;
     font-size: 1.12rem !important;
     line-height: 1.6 !important;
-    min-height: 350px !important;
-    height: 350px !important;
+    min-height: 240px !important;
+    height: 240px !important;
     width: 100% !important;
     padding: 1.25rem 1.35rem !important;
     transition: box-shadow 0.35s ease, border-color 0.35s ease !important;
@@ -1059,7 +1067,7 @@ if not st.session_state.splash_done:
 
     st.markdown('<div class="splash-hero-wrap">', unsafe_allow_html=True)
     if OPENING_IMAGE.exists():
-        st.image(str(OPENING_IMAGE), width=950)
+        st.image(str(OPENING_IMAGE), width=760)
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown(
@@ -1073,7 +1081,7 @@ if not st.session_state.splash_done:
     )
 
     st.markdown('<div class="splash-launch-btn">', unsafe_allow_html=True)
-    if st.button("Launch", type="primary", use_container_width=True):
+    if st.button("Launch", type="primary"):
         st.session_state.splash_done = True
         st.session_state.just_launched = True
         st.session_state.last_result = None
