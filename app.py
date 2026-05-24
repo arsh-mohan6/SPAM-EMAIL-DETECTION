@@ -245,8 +245,9 @@ html, body, [class*="css"] {{
     font-size: 0.82rem !important;
     padding: 0 1rem !important;
 
-    background: linear-gradient(135deg, {accent}, {accent2}) !important;
-    background-color: {accent} !important;
+    background: rgba(15,23,42,0.88) !important;
+
+    backdrop-filter: blur(12px);
 
     color: white !important;
     -webkit-text-fill-color: white !important;
@@ -261,10 +262,32 @@ html, body, [class*="css"] {{
 
     transition: all 0.25s ease !important;
 }}
-
 .block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type .stButton > button:hover {{
-    transform: translateY(-1px);
+
+    transform: translateY(-2px);
+
     opacity: 1 !important;
+
+    box-shadow: 0 0 22px {glow} !important;
+}}
+.home-btn .stButton > button {{
+
+    background: linear-gradient(135deg, {accent}, {accent2}) !important;
+
+    color: white !important;
+
+    border: none !important;
+
+    font-weight: 700 !important;
+
+    box-shadow: 0 0 18px {glow} !important;
+}}
+
+.home-btn .stButton > button:hover {{
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 0 28px {glow} !important;
 }}
 .nav-spacer {{
     height: 3.6rem;
@@ -288,17 +311,7 @@ html, body, [class*="css"] {{
     flex-wrap: wrap;
 }}
 
-.home-btn button {{
-    width: auto !important;
-    min-width: 4.5rem !important;
-    height: 2.2rem !important;
-    font-size: 0.85rem !important;
-    font-weight: 700 !important;
-    background: linear-gradient(135deg, {accent}, {accent2}) !important;
-    border: none !important;
-    color: white !important;
-    box-shadow: 0 0 15px {glow} !important;
-}}
+
 
 .theme-pill {{
     display: inline-block;
