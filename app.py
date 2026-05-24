@@ -1177,7 +1177,7 @@ email = st.text_area(
     label_visibility="collapsed",
 )
 
-btn1, btn2, btn3 = st.columns([1, 1, 4])
+left_space, btn1, btn2, right_space = st.columns([2, 1.2, 1.2, 2])
 with btn1:
     st.markdown('<div class="btn-analyze">', unsafe_allow_html=True)
     analyze = st.button("Analyze", type="primary", use_container_width=True)
