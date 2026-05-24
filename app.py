@@ -758,6 +758,11 @@ def ensure_nltk():
     except LookupError:
         nltk.download("punkt", quiet=True)
 
+    try:
+        nltk.data.find("tokenizers/punkt_tab")
+    except LookupError:
+        nltk.download("punkt_tab", quiet=True)
+
 
 def clean_text(text: str) -> str:
     ensure_nltk()
@@ -939,7 +944,7 @@ with left:
     with c2:
         st.markdown('<div class="btn-clear">', unsafe_allow_html=True)
         if st.button("✕ Clear", use_container_width=True):
-            st.session_state.email_input = ""
+            st.session_state["email_input"] = ""
             st.session_state.last_result = None
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
