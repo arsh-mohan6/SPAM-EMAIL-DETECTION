@@ -285,6 +285,45 @@ html, body, [class*="css"] {{
 
     box-shadow: 0 0 28px {glow} !important;
 }}
+.fullscreen-btn {
+
+    position: fixed;
+
+    bottom: 22px;
+
+    left: 22px;
+
+    z-index: 99999;
+
+    background: linear-gradient(
+        135deg,
+        {accent},
+        {accent2}
+    );
+
+    color: white;
+
+    border: none;
+
+    border-radius: 14px;
+
+    padding: 0.9rem 1.2rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 0 18px {glow};
+
+    transition: all 0.25s ease;
+}
+
+.fullscreen-btn:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 0 30px {glow};
+}
 .nav-spacer {{
     height: 3.6rem;
 }}
@@ -385,6 +424,18 @@ section.main > div {{
 
     object-fit: cover !important;
 }}
+.custom-splash-img {
+
+    width: 100% !important;
+
+    max-width: 760px !important;
+
+    border-radius: 24px !important;
+
+    display: block !important;
+
+    margin: auto !important;
+}
 
 .splash-page-title {{
     text-align: center;
@@ -1154,10 +1205,24 @@ if not st.session_state.splash_done:
     hero_left, hero_center, hero_right = st.columns([1, 2, 1])
 
     with hero_center:
+
         st.markdown('<div class="splash-hero-wrap">', unsafe_allow_html=True)
 
         if OPENING_IMAGE.exists():
-            st.image(str(OPENING_IMAGE), use_container_width=True)
+
+            img_bytes = OPENING_IMAGE.read_bytes()
+
+            img_base64 = base64.b64encode(img_bytes).decode()
+
+            st.markdown(
+                f"""
+                <img
+                    src="data:image/webp;base64,{img_base64}"
+                    class="custom-splash-img"
+                >
+                """,
+                unsafe_allow_html=True,
+            )
 
         st.markdown("</div>", unsafe_allow_html=True)
 
@@ -1201,6 +1266,30 @@ with nav_right:
         go_home()
 
     st.markdown("</div>", unsafe_allow_html=True)
+st.markdown(
+    """
+    <button class="fullscreen-btn" onclick="toggleFullscreen()">
+        ⛶ Full Screen
+    </button>
+
+    <script>
+    function toggleFullscreen() {
+
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        }
+
+        else {
+
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
+    </script>
+    """,
+    unsafe_allow_html=True,
+)
 st.markdown('<div class="nav-spacer"></div>', unsafe_allow_html=True)
 
 st.markdown(
