@@ -238,38 +238,34 @@ html, body, [class*="css"] {{
     margin: 0.5rem 0 0 0;
 }}
 
-.block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type .stButton > button {{
-    width: auto !important;
-    min-width: 10rem !important;
-    height: 2.4rem !important;
-    font-size: 0.82rem !important;
-    padding: 0 1rem !important;
+/* TOP NAV BUTTONS ONLY */
+
+[data-testid="stHorizontalBlock"] .stButton > button {{
 
     background: rgba(15,23,42,0.88) !important;
 
-    backdrop-filter: blur(12px);
-
     color: white !important;
-    -webkit-text-fill-color: white !important;
 
-    border: none !important;
     border-radius: 14px !important;
 
-    opacity: 1 !important;
-    filter: none !important;
+    border: none !important;
+
+    height: 2.6rem !important;
+
+    padding: 0 1rem !important;
 
     box-shadow: 0 0 15px {glow} !important;
 
     transition: all 0.25s ease !important;
 }}
-.block-container > div > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type .stButton > button:hover {{
+
+[data-testid="stHorizontalBlock"] .stButton > button:hover {{
 
     transform: translateY(-2px);
 
-    opacity: 1 !important;
-
-    box-shadow: 0 0 22px {glow} !important;
+    box-shadow: 0 0 24px {glow} !important;
 }}
+
 .home-btn .stButton > button {{
 
     background: linear-gradient(135deg, {accent}, {accent2}) !important;
@@ -640,44 +636,54 @@ div[data-testid="stTextArea"] textarea:focus {{
     box-shadow: 0 0 24px {glow} !important;
 }}
 .btn-analyze button {{
-    background: linear-gradient(90deg, {accent2}, #2563eb, {accent}) !important;
-    background-size: 200% 200% !important;
-    animation: btnShine 4s ease infinite !important;
-    border: none !important;
+
+    background: linear-gradient(
+        135deg,
+        {accent},
+        {accent2}
+    ) !important;
+
     color: white !important;
+
+    border: none !important;
+
+    border-radius: 16px !important;
+
+    height: 3.2rem !important;
+
     font-weight: 700 !important;
-    border-radius: 14px !important;
-    height: 3rem !important;
-    box-shadow: 0 0 28px {glow} !important;
-    transition: transform 0.25s ease !important;
+
+    font-size: 1rem !important;
+
+    box-shadow: 0 0 22px {glow} !important;
+
+    transition: all 0.25s ease !important;
 }}
 
 .btn-analyze button:hover {{
-    transform: scale(1.03) !important;
+
+    transform: translateY(-2px) scale(1.02);
+
+    box-shadow: 0 0 35px {glow} !important;
 }}
 
 .btn-clear button {{
 
-    background: linear-gradient(
-        135deg,
-        rgba(255,255,255,0.88),
-        rgba(255,255,255,0.72)
-    ) !important;
+    background: rgba(255,255,255,0.82) !important;
 
     color: #1e293b !important;
 
-    border: 1px solid rgba(219,39,119,0.28) !important;
+    border: 1px solid rgba(219,39,119,0.22) !important;
+
+    border-radius: 16px !important;
+
+    height: 3.2rem !important;
 
     font-weight: 700 !important;
 
-    border-radius: 14px !important;
-
-    height: 3rem !important;
-
     backdrop-filter: blur(12px);
 
-    box-shadow:
-        0 4px 18px rgba(219,39,119,0.16) !important;
+    box-shadow: 0 0 18px rgba(219,39,119,0.12) !important;
 
     transition: all 0.25s ease !important;
 }}
@@ -694,8 +700,7 @@ div[data-testid="stTextArea"] textarea:focus {{
 
     transform: translateY(-2px);
 
-    box-shadow:
-        0 0 20px {glow} !important;
+    box-shadow: 0 0 28px {glow} !important;
 }}
 .btn-clear .stButton > button {{
     background: rgba(255,255,255,0.88) !important;
