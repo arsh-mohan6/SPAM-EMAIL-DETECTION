@@ -16,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent
 ASSETS = BASE_DIR / ".md"
 OPENING_IMAGE = ASSETS / "opening_image.webp"
 DARK_TEXTURE = ASSETS / "videoframe_4444.png"
-AESTHETIC_TEXTURE = ASSETS / "Arsh_Mohan.png"
+AESTHETIC_TEXTURE = ASSETS / "Arsh_Mohan.png?v=2"
 
 SCAN_MESSAGES = [
     "Reading email content...",
